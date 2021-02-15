@@ -1,5 +1,4 @@
 import pytest
-import time
 from appium import webdriver
 
 
@@ -9,8 +8,8 @@ def set_up(request):
         "platformName": "Android",
         "deviceName": "AndroidTestDevice",
         "platformVervion": "8.0",
-        "appPackage": "ru.mts.twomem",
-        "appActivity": "ru.mts.twomem.app.AppActivity"
+        "appPackage": "org.wikipedia",
+        "appActivity": "org.wikipedia.main.MainActivity"
     }
 
     def tear_down():
@@ -20,12 +19,7 @@ def set_up(request):
     return webdriver.Remote('http://localhost:4723/wd/hub', des_cap)
 
 
-def test_input(set_up):
-    set_up.find_element_by_id("ru.mts.twomem:id/enter").click()
-    time.sleep(5)
-    set_up.find_element_by_id('phoneInput').send_keys('9250073358')
-    set_up.find_element_by_id('submit').click()
-    time.sleep(5)
-    assert set_up.find_element_by_xpath('//android.webkit.WebView[@content-desc="Введите код из SMS"]'
-                                        '/android.view.View/android.view.View[1]/android.view.View[4]/'
-                                        'android.view.View/android.view.View/android.widget.EditText')
+@pytest.mark.parametrize("text,elem", [("Search Wikipedia", "android.widget.TextView"), ])
+def test_validate_text_of_element(set_up, text, elem):
+    elem = set_up.find_element_by_class_name(elem)
+    assert elem.text == text, f"Элемент {elem}, не содержит текст - {text}"
