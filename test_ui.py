@@ -29,18 +29,6 @@ def test_validate_text_of_element(set_up, text, elem):
 def test_search(set_up, word):
     set_up.find_element_by_id('org.wikipedia:id/search_container').send_keys(word)
     set_up.implicitly_wait(5)
-    search_res = set_up.find_elements_by_class_name('android.widget.TextView')
-    x = 0
+    search_res = set_up.find_elements_by_id('org.wikipedia:id/page_list_item_title')
     for i in search_res:
-        if word in i.get_attribute('text').lower():
-            x += 1
-    assert x >= 2
-    button = set_up.find_element_by_xpath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android"
-                                          ".widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout"
-                                          "/android.widget.FrameLayout/android.widget.FrameLayout/android.widget"
-                                          ".FrameLayout/android.widget.LinearLayout[1]/android.widget.FrameLayout["
-                                          "1]/android.view.ViewGroup/android.widget.ImageButton")
-    button.click()
-    search_res = set_up.find_elements_by_class_name('android.widget.TextView')
-    for i in search_res:
-        assert word not in i.get_attribute('text').lower()
+        assert word in i.get_attribute('text').lower()
