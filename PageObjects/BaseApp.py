@@ -42,3 +42,22 @@ class BasePage:
         time.sleep(sleep)
         allure.attach(self.driver.get_screenshot_as_png(), name=screen_name(name),
                       attachment_type=AttachmentType.PNG)
+
+    def swipe_till_elem(self,By: By, elem_id: str) -> None:
+        counter = 100
+        size = self.driver.get_window_size()
+        x = int(size['width'] / 2)
+        start_y = int(size['height'] * 0.8)
+        end_y = int(size['height'] * 0.2)
+        actions = TouchAction(self.driver)
+        while counter != 0:
+            counter -= 1
+            actions.press(x=x, y=start_y)
+            actions.wait(150)
+            actions.move_to(x=x, y=end_y)
+            actions.release()
+            actions.perform()
+            footer = self.find_elements((By, elem_id), time=15)
+            if footer:
+                break
+
